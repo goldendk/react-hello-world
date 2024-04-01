@@ -11,42 +11,46 @@ const MyPage = () => {
         setCounter(counter + 1);
     }
 
-    const scheduleLoadData = () => {
-        setTimeout(() => {
-            try {
-                loadData()    
-            } catch (error) {
-                
-            }
-            finally{
-                scheduleLoadData();
-            }
-            
-        }, 1000);
-    }
 
 
-const loadData = () => {
-    fetch("http://localhost:3000/manifest.json").then((result) => {
-        result.json().then((data) => {
-            console.log(JSON.stringify(data));
-        });
-    }).finally(() => {
-    });
 
-}
+    useEffect(() => {
+
+        const scheduleLoadData = () => {
+            setTimeout(() => {
+                try {
+                    loadData()
+                } catch (error) {
+
+                }
+                finally {
+                    scheduleLoadData();
+                }
+
+            }, 1000);
+        }
 
 
-useEffect(() => {
-    scheduleLoadData();
-}, []);
+        const loadData = () => {
+            fetch("http://localhost:3000/manifest.json").then((result) => {
+                result.json().then((data) => {
+                    console.log(JSON.stringify(data));
+                });
+            }).finally(() => {
+            });
+
+        }
 
 
-return (<div>
-    <div>Page counter: {counter}</div>
-    <input type="button" onClick={incrementListener} value="MyPage increment" />
-    <div><MyComponent counterChangeListener={onCounterChange} counter={counter}></MyComponent></div>
-</div>)
+        scheduleLoadData();
+    }, []);
+
+
+    return (<div>
+        <div>Page counter: {counter}</div>
+        <input type="button" onClick={incrementListener} value="MyPage increment" />
+        <div><MyComponent counterChangeListener={onCounterChange} counter={counter}></MyComponent></div>
+    </div>)
 
 }
 export default MyPage;
